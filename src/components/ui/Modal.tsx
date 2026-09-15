@@ -68,7 +68,7 @@ export function Modal({
           </div>
           <button
             onClick={onClose}
-            className="rounded-xl p-1.5 text-slate-400 hover:text-white hover:bg-white/[0.08] transition-colors cursor-pointer"
+            className="rounded-xl p-1.5 text-slate-400 hover:text-white hover:bg-slate-900/30 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>

@@ -42,22 +42,11 @@ export default function RecruiterInternshipsPage() {
 
   const fetchPostings = async () => {
     try {
-      // Use auth me to get company id or fetch company postings
-      const userRes = await fetch("/api/auth/me");
-      if (!userRes.ok) return;
-      const userData = await userRes.json();
-      const companyId = userData.user?.company?.id;
-
-      if (companyId) {
-        const res = await fetch(`/api/internships?limit=50`);
-        if (res.ok) {
-          const data = await res.json();
-          // Filter to this company's postings
-          const mine = data.internships.filter(
-            (i: any) => i.company.id === companyId
-          );
-          setInternships(mine);
-        }
+      // Use recruiterView=true to get ALL internships (DRAFT, PUBLISHED, CLOSED)
+      const res = await fetch("/api/internships?recruiterView=true");
+      if (res.ok) {
+        const data = await res.json();
+        setInternships(data.internships || []);
       }
     } catch (err) {
       console.error(err);
@@ -114,31 +103,41 @@ export default function RecruiterInternshipsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8 lg:py-12">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+    <div className="min-h-screen py-8 lg:py-12 relative overflow-hidden" style={{ background: "transparent" }}>
+      {/* Ambient background glows */}
+      <div className="absolute top-10 left-10 w-96 h-96 bg-indigo-500/8 blur-3xl pointer-events-none rounded-full" />
+      <div className="absolute top-60 right-10 w-96 h-96 bg-blue-500/8 blur-3xl pointer-events-none rounded-full" />
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 relative z-10">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
               Manage Internships
             </h1>
-            <p className="text-sm text-slate-600 mt-1">
-              Create, edit, close, or review candidates for your company's internship listings.
+            <p className="text-sm text-slate-400 mt-1">
+              Create, edit, close, or review candidates for your company&apos;s internship listings.
             </p>
           </div>
 
           <Link href="/recruiter/internships/new">
-            <Button size="md" className="gap-1.5 shadow-sm">
+            <button className="px-5 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2 cursor-pointer">
               <PlusCircle className="w-4 h-4" />
               Post New Internship
-            </Button>
+            </button>
           </Link>
         </div>
 
         {loading ? (
-          <div className="bg-white rounded-2xl border border-slate-200 p-8 space-y-4 animate-pulse">
-            <div className="h-6 w-48 bg-slate-200 rounded" />
-            <div className="h-20 bg-slate-100 rounded-xl" />
-            <div className="h-20 bg-slate-100 rounded-xl" />
+          <div
+            className="rounded-2xl p-8 space-y-4 animate-pulse"
+            style={{
+              background: "rgba(15,23,42,0.85)",
+              border: "1px solid rgba(255,255,255,0.08)",
+            }}
+          >
+            <div className="h-6 w-48 bg-slate-700 rounded" />
+            <div className="h-16 bg-slate-800/60 rounded-xl" />
+            <div className="h-16 bg-slate-800/60 rounded-xl" />
           </div>
         ) : internships.length === 0 ? (
           <EmptyState
@@ -149,11 +148,22 @@ export default function RecruiterInternshipsPage() {
             actionHref="/recruiter/internships/new"
           />
         ) : (
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div
+            className="rounded-2xl overflow-hidden"
+            style={{
+              background: "rgba(15,23,42,0.85)",
+              backdropFilter: "blur(24px)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              boxShadow: "0 4px 24px -4px rgba(0,0,0,0.4)",
+            }}
+          >
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase font-semibold">
+                  <tr
+                    className="border-b text-slate-400 uppercase font-semibold"
+                    style={{ borderColor: "rgba(255,255,255,0.08)" }}
+                  >
                     <th className="py-3.5 px-6">Internship Role</th>
                     <th className="py-3.5 px-6">Work Mode</th>
                     <th className="py-3.5 px-6">Deadline</th>
@@ -162,36 +172,36 @@ export default function RecruiterInternshipsPage() {
                     <th className="py-3.5 px-6 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
                   {internships.map((item) => {
                     const isExpired = isPastDeadline(item.deadline);
 
                     return (
                       <tr
                         key={item.id}
-                        className="hover:bg-slate-50/70 transition-colors"
+                        className="hover:bg-white/[0.03] transition-colors"
                       >
-                        <td className="py-4 px-6 font-semibold text-slate-900">
+                        <td className="py-4 px-6 font-semibold text-white">
                           <Link
                             href={`/internships/${item.id}`}
-                            className="hover:text-blue-600 transition-colors flex items-center gap-1.5"
+                            className="hover:text-blue-300 transition-colors flex items-center gap-1.5"
                           >
                             {item.title}
-                            <ExternalLink className="w-3 h-3 text-slate-400 inline" />
+                            <ExternalLink className="w-3 h-3 text-slate-500 inline" />
                           </Link>
                           <span className="block text-[11px] text-slate-400 font-normal mt-0.5">
                             {item.location}
                           </span>
                         </td>
-                        <td className="py-4 px-6 text-slate-600">
+                        <td className="py-4 px-6 text-slate-400">
                           {item.workMode}
                         </td>
-                        <td className="py-4 px-6 text-slate-600">
+                        <td className="py-4 px-6">
                           <span
                             className={
                               isExpired
-                                ? "text-amber-600 font-medium"
-                                : "text-slate-600"
+                                ? "text-amber-400 font-medium"
+                                : "text-slate-400"
                             }
                           >
                             {formatDate(item.deadline)}
@@ -210,7 +220,7 @@ export default function RecruiterInternshipsPage() {
                         <td className="py-4 px-6 text-center">
                           <Link
                             href={`/recruiter/internships/${item.id}/applicants`}
-                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold transition-colors"
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/15 hover:bg-blue-500/25 text-blue-300 font-semibold transition-colors"
                           >
                             <Users className="w-3.5 h-3.5" />
                             <span>{item._count.applications}</span>
@@ -218,11 +228,15 @@ export default function RecruiterInternshipsPage() {
                         </td>
                         <td className="py-4 px-6 text-right space-x-2">
                           <Link
-                            href={`/recruiter/internships/${item.id}/applicants`}
+                            href={`/recruiter/internships/${item.id}/edit`}
                           >
-                            <Button size="sm" variant="outline" className="text-xs">
-                              Review
-                            </Button>
+                            <button
+                              className="p-1.5 text-slate-400 hover:text-blue-300 hover:bg-blue-500/10 rounded-lg transition-colors inline-flex items-center"
+                              title="Edit posting"
+                              disabled={actionLoading === item.id}
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
                           </Link>
 
                           <button
@@ -232,8 +246,8 @@ export default function RecruiterInternshipsPage() {
                             disabled={actionLoading === item.id}
                             className={`px-2.5 py-1 text-xs font-medium rounded-lg border transition-colors ${
                               item.status === "PUBLISHED"
-                                ? "border-slate-200 text-slate-600 hover:bg-slate-100"
-                                : "border-emerald-200 text-emerald-700 bg-emerald-50 hover:bg-emerald-100"
+                                ? "border-slate-600 text-slate-400 hover:bg-slate-700/50"
+                                : "border-emerald-500/30 text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20"
                             }`}
                           >
                             {item.status === "PUBLISHED" ? "Close" : "Publish"}
@@ -242,7 +256,7 @@ export default function RecruiterInternshipsPage() {
                           <button
                             onClick={() => handleDelete(item.id)}
                             disabled={actionLoading === item.id}
-                            className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors inline-flex items-center"
+                            className="p-1.5 text-rose-400 hover:bg-rose-500/15 rounded-lg transition-colors inline-flex items-center"
                             title="Delete posting"
                           >
                             <Trash2 className="w-4 h-4" />

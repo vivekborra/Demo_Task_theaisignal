@@ -129,7 +129,7 @@ export function Navbar() {
                     className={`px-3.5 py-2 rounded-lg transition-all duration-200 ${
                       isCurrent("/student/applications")
                         ? "bg-blue-500/15 text-blue-300 font-semibold"
-                        : "text-slate-400 hover:text-white hover:bg-white/[0.06]"
+                        : "text-slate-300 hover:text-white hover:bg-slate-800/40"
                     }`}
                   >
                     My Applications
@@ -139,7 +139,7 @@ export function Navbar() {
                     className={`px-3.5 py-2 rounded-lg transition-all duration-200 ${
                       isCurrent("/student/profile")
                         ? "bg-blue-500/15 text-blue-300 font-semibold"
-                        : "text-slate-400 hover:text-white hover:bg-white/[0.06]"
+                        : "text-slate-300 hover:text-white hover:bg-slate-800/40"
                     }`}
                   >
                     Student Profile
@@ -154,7 +154,7 @@ export function Navbar() {
                     className={`px-3.5 py-2 rounded-lg transition-all duration-200 ${
                       isCurrent("/recruiter", true)
                         ? "bg-violet-500/15 text-violet-300 font-semibold"
-                        : "text-slate-400 hover:text-white hover:bg-white/[0.06]"
+                        : "text-slate-300 hover:text-white hover:bg-slate-800/40"
                     }`}
                   >
                     Dashboard
@@ -175,7 +175,7 @@ export function Navbar() {
                     className={`px-3.5 py-2 rounded-lg transition-all duration-200 ${
                       isCurrent("/recruiter/company")
                         ? "bg-violet-500/15 text-violet-300 font-semibold"
-                        : "text-slate-400 hover:text-white hover:bg-white/[0.06]"
+                        : "text-slate-300 hover:text-white hover:bg-slate-800/40"
                     }`}
                   >
                     Company
@@ -188,7 +188,7 @@ export function Navbar() {
           {/* Desktop Right Actions */}
           <div className="hidden md:flex items-center gap-3">
             {loading ? (
-              <div className="w-28 h-9 bg-white/[0.06] rounded-xl animate-pulse" />
+              <div className="w-28 h-9 bg-slate-800/30 rounded-xl animate-pulse" />
             ) : user ? (
               <div className="flex items-center gap-3">
                 {user.role === "RECRUITER" && (
@@ -203,7 +203,7 @@ export function Navbar() {
                 <div className="relative">
                   <button
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
-                    className="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-full border border-white/[0.1] bg-white/[0.06] hover:bg-white/[0.1] hover:border-white/[0.18] transition-all"
+                    className="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-full border border-white/[0.08] bg-slate-800/30 hover:bg-slate-800/40 hover:border-white/[0.12] transition-all"
                   >
                     <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 text-white flex items-center justify-center text-xs font-bold shadow-sm">
                       {user.name.charAt(0).toUpperCase()}
@@ -245,14 +245,14 @@ export function Navbar() {
                           <>
                             <Link
                               href="/student/profile"
-                              className="flex items-center gap-2.5 px-4 py-2 text-slate-300 hover:bg-white/[0.06] hover:text-blue-400 transition-colors"
+                              className="flex items-center gap-2.5 px-4 py-2 text-slate-300 hover:bg-slate-800/40 hover:text-blue-400 transition-colors"
                             >
                               <UserIcon className="w-4 h-4 text-slate-500" />
                               Student Profile
                             </Link>
                             <Link
                               href="/student/applications"
-                              className="flex items-center gap-2.5 px-4 py-2 text-slate-300 hover:bg-white/[0.06] hover:text-blue-400 transition-colors"
+                              className="flex items-center gap-2.5 px-4 py-2 text-slate-300 hover:bg-slate-800/40 hover:text-blue-400 transition-colors"
                             >
                               <FileText className="w-4 h-4 text-slate-500" />
                               My Applications
@@ -262,21 +262,21 @@ export function Navbar() {
                           <>
                             <Link
                               href="/recruiter"
-                              className="flex items-center gap-2.5 px-4 py-2 text-slate-300 hover:bg-white/[0.06] hover:text-violet-400 transition-colors"
+                              className="flex items-center gap-2.5 px-4 py-2 text-slate-300 hover:bg-slate-800/40 hover:text-violet-400 transition-colors"
                             >
                               <LayoutDashboard className="w-4 h-4 text-slate-500" />
                               Dashboard
                             </Link>
                             <Link
                               href="/recruiter/internships"
-                              className="flex items-center gap-2.5 px-4 py-2 text-slate-300 hover:bg-white/[0.06] hover:text-violet-400 transition-colors"
+                              className="flex items-center gap-2.5 px-4 py-2 text-slate-300 hover:bg-slate-800/40 hover:text-violet-400 transition-colors"
                             >
                               <Briefcase className="w-4 h-4 text-slate-500" />
                               Manage Internships
                             </Link>
                             <Link
                               href="/recruiter/company"
-                              className="flex items-center gap-2.5 px-4 py-2 text-slate-300 hover:bg-white/[0.06] hover:text-violet-400 transition-colors"
+                              className="flex items-center gap-2.5 px-4 py-2 text-slate-300 hover:bg-slate-800/40 hover:text-violet-400 transition-colors"
                             >
                               <Building className="w-4 h-4 text-slate-500" />
                               Company Profile
@@ -307,7 +307,7 @@ export function Navbar() {
                   </button>
                 </Link>
                 <Link href="/login">
-                  <button className="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/[0.08] transition-all">
+                  <button className="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800/40 transition-all">
                     Sign In
                   </button>
                 </Link>
@@ -324,7 +324,7 @@ export function Navbar() {
           <div className="flex md:hidden items-center gap-2">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.08] transition-colors"
+              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/40 transition-colors"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? (
@@ -346,7 +346,7 @@ export function Navbar() {
           <Link
             href="/internships"
             onClick={() => setMobileMenuOpen(false)}
-            className="block py-2.5 px-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/[0.06]"
+            className="block py-2.5 px-3 rounded-xl text-sm font-semibold text-slate-300 hover:text-white hover:bg-slate-800/40"
           >
             Find Internships
           </Link>
@@ -356,14 +356,14 @@ export function Navbar() {
               <Link
                 href="/student/applications"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block py-2.5 px-3 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-white/[0.06]"
+                className="block py-2.5 px-3 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/40"
               >
                 My Applications
               </Link>
               <Link
                 href="/student/profile"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block py-2.5 px-3 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-white/[0.06]"
+                className="block py-2.5 px-3 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/40"
               >
                 Student Profile
               </Link>
@@ -375,14 +375,14 @@ export function Navbar() {
               <Link
                 href="/recruiter"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block py-2.5 px-3 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-white/[0.06]"
+                className="block py-2.5 px-3 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/40"
               >
                 Dashboard
               </Link>
               <Link
                 href="/recruiter/internships"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block py-2.5 px-3 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-white/[0.06]"
+                className="block py-2.5 px-3 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/40"
               >
                 Manage Postings
               </Link>
@@ -432,7 +432,7 @@ export function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full"
                 >
-                  <button className="w-full py-2.5 rounded-xl text-xs font-semibold text-slate-300 border border-white/[0.12] hover:bg-white/[0.06] transition-all">
+                  <button className="w-full py-2.5 rounded-xl text-xs font-semibold text-slate-300 border border-white/[0.08] hover:bg-slate-800/40 transition-all">
                     Sign In
                   </button>
                 </Link>

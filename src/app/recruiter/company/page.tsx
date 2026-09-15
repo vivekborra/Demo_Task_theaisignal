@@ -99,14 +99,18 @@ export default function RecruiterCompanyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8 lg:py-12">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+    <div className="min-h-screen py-8 lg:py-12 relative overflow-hidden" style={{ background: "transparent" }}>
+      {/* Ambient background glows */}
+      <div className="absolute top-10 left-10 w-96 h-96 bg-indigo-500/8 blur-3xl pointer-events-none rounded-full" />
+      <div className="absolute top-60 right-10 w-96 h-96 bg-blue-500/8 blur-3xl pointer-events-none rounded-full" />
+
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 relative z-10">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
               Company Profile
             </h1>
-            <p className="text-sm text-slate-600 mt-1">
+            <p className="text-sm text-slate-400 mt-1">
               Your company branding and mission appear on all your internship listings.
             </p>
           </div>
@@ -122,23 +126,31 @@ export default function RecruiterCompanyPage() {
         </div>
 
         {successMsg && (
-          <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-sm text-emerald-800 flex items-center gap-2.5">
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+          <div className="p-4 rounded-xl text-sm text-emerald-300 flex items-center gap-2.5" style={{ background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.25)" }}>
+            <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
             <span>{successMsg}</span>
           </div>
         )}
 
         {errorMsg && (
-          <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-sm text-rose-800 flex items-center gap-2.5">
-            <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
+          <div className="p-4 rounded-xl text-sm text-rose-300 flex items-center gap-2.5" style={{ background: "rgba(220,38,38,0.1)", border: "1px solid rgba(220,38,38,0.25)" }}>
+            <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
-            <div className="flex items-center gap-2 text-base font-semibold text-slate-900 border-b border-slate-100 pb-3">
-              <Building className="w-5 h-5 text-blue-600" />
+          <div
+            className="rounded-3xl p-6 sm:p-8 space-y-5"
+            style={{
+              background: "rgba(15,23,42,0.85)",
+              backdropFilter: "blur(24px)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              boxShadow: "0 4px 24px -4px rgba(0,0,0,0.4)",
+            }}
+          >
+            <div className="flex items-center gap-2 text-base font-bold text-white border-b border-white/[0.08] pb-3">
+              <Building className="w-5 h-5 text-blue-400" />
               <span>Company Information</span>
             </div>
 

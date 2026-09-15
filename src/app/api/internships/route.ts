@@ -12,6 +12,29 @@ export const dynamic = "force-dynamic";
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
+
+    // Recruiter view: return ALL of the recruiter's own internships (any status)
+    const recruiterView = searchParams.get("recruiterView") === "true";
+    if (recruiterView) {
+      const user = await getCurrentUser();
+      if (!user || user.role !== "RECRUITER" || !user.company) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+
+      const recruiterInternships = await prisma.internship.findMany({
+        where: { companyId: user.company.id },
+        orderBy: { createdAt: "desc" },
+        include: {
+          company: {
+            select: { id: true, name: true, logoUrl: true, location: true },
+          },
+          _count: { select: { applications: true } },
+        },
+      });
+
+      return NextResponse.json({ internships: recruiterInternships });
+    }
+
     const parsedQuery = internshipQuerySchema.safeParse({
       q: searchParams.get("q") || undefined,
       location: searchParams.get("location") || undefined,

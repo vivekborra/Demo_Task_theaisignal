@@ -150,7 +150,7 @@ export function FilterPanel({ filters, onChange, onReset }: FilterPanelProps) {
                 className={`py-2 px-2 text-xs font-bold rounded-xl border transition-all text-center cursor-pointer ${
                   active
                     ? "bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-500/25"
-                    : "bg-white/[0.04] border-white/[0.08] text-slate-400 hover:text-white hover:bg-white/[0.08]"
+                    : "bg-slate-900/30 border-white/[0.08] text-slate-400 hover:text-white hover:bg-slate-800/30"
                 }`}
               >
                 {mode === "REMOTE"
@@ -198,7 +198,7 @@ export function FilterPanel({ filters, onChange, onReset }: FilterPanelProps) {
                   className={`text-[11px] px-2.5 py-1 rounded-lg border font-medium transition-all cursor-pointer ${
                     isSelected
                       ? "bg-blue-500/20 border-blue-500/50 text-blue-300 font-bold shadow-xs"
-                      : "bg-white/[0.04] border-white/[0.07] text-slate-400 hover:border-white/[0.15] hover:text-white hover:bg-white/[0.08]"
+                      : "bg-slate-900/30 border-white/[0.07] text-slate-400 hover:border-white/[0.15] hover:text-white hover:bg-slate-800/30"
                   }`}
                 >
                   📍 {hub}
@@ -249,7 +249,7 @@ export function FilterPanel({ filters, onChange, onReset }: FilterPanelProps) {
                 className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-all cursor-pointer ${
                   isSelected
                     ? "bg-gradient-to-r from-blue-600 to-indigo-600 border-transparent text-white shadow-xs"
-                    : "bg-white/[0.04] border-white/[0.07] text-slate-400 hover:border-white/[0.15] hover:text-slate-200 hover:bg-white/[0.08]"
+                    : "bg-slate-900/30 border-white/[0.07] text-slate-400 hover:border-white/[0.15] hover:text-slate-200 hover:bg-slate-800/30"
                 }`}
               >
                 {skill}

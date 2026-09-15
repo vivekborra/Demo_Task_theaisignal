@@ -63,8 +63,9 @@ function InternshipsContent() {
   const fetchInternships = useCallback(async () => {
     setLoading(true);
     try {
-      const queryStr = searchParams.toString();
-      const res = await fetch(`/api/internships?${queryStr}&limit=9`);
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("limit", "9"); // Always override limit for the grid display
+      const res = await fetch(`/api/internships?${params.toString()}`);
       if (res.ok) {
         const data = await res.json();
         setInternships(data.internships || []);

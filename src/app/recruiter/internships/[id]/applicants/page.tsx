@@ -125,12 +125,16 @@ export default function InternshipApplicantsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8 lg:py-12">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+    <div className="min-h-screen py-8 lg:py-12 relative overflow-hidden" style={{ background: "transparent" }}>
+      {/* Ambient background glows */}
+      <div className="absolute top-10 left-10 w-96 h-96 bg-indigo-500/8 blur-3xl pointer-events-none rounded-full" />
+      <div className="absolute top-60 right-10 w-96 h-96 bg-blue-500/8 blur-3xl pointer-events-none rounded-full" />
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 relative z-10">
         <div className="mb-4">
           <Link
             href="/recruiter/internships"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-blue-600 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-blue-300 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Manage Internships
@@ -140,29 +144,29 @@ export default function InternshipApplicantsPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-xs font-semibold text-blue-600 uppercase tracking-wider mb-1">
+            <div className="flex items-center gap-2 text-xs font-semibold text-blue-400 uppercase tracking-wider mb-1">
               <Users className="w-3.5 h-3.5" />
               <span>Candidate Pipeline</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
               Applicants for: {internshipTitle || "Internship Role"}
             </h1>
-            <p className="text-sm text-slate-600 mt-1">
+            <p className="text-sm text-slate-400 mt-1">
               Review candidate qualifications, inspect portfolios/resumes, and update hiring statuses.
             </p>
           </div>
 
-          <div className="text-xs font-medium text-slate-500 bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-2xs">
+          <div className="text-xs font-medium text-slate-400 px-3 py-1.5 rounded-lg" style={{ background: "rgba(30,41,59,0.8)", border: "1px solid rgba(255,255,255,0.1)" }}>
             Total Candidates:{" "}
-            <span className="font-bold text-slate-900">
+            <span className="font-bold text-white">
               {applicants.length}
             </span>
           </div>
         </div>
 
         {error && (
-          <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-sm text-rose-800 flex items-center gap-2.5">
-            <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
+          <div className="p-4 rounded-xl text-sm text-rose-300 flex items-center gap-2.5" style={{ background: "rgba(220,38,38,0.1)", border: "1px solid rgba(220,38,38,0.25)" }}>
+            <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
             <span>{error}</span>
           </div>
         )}
@@ -172,11 +176,12 @@ export default function InternshipApplicantsPage() {
             {Array.from({ length: 3 }).map((_, i) => (
               <div
                 key={i}
-                className="bg-white rounded-2xl border border-slate-200 p-6 space-y-4 animate-pulse"
+                className="rounded-2xl p-6 space-y-4 animate-pulse"
+                style={{ background: "rgba(15,23,42,0.85)", border: "1px solid rgba(255,255,255,0.08)" }}
               >
-                <div className="h-6 w-48 bg-slate-200 rounded" />
-                <div className="h-4 w-64 bg-slate-100 rounded" />
-                <div className="h-20 bg-slate-50 rounded-xl" />
+                <div className="h-6 w-48 bg-slate-700 rounded" />
+                <div className="h-4 w-64 bg-slate-800 rounded" />
+                <div className="h-20 bg-slate-800/60 rounded-xl" />
               </div>
             ))}
           </div>
@@ -197,35 +202,36 @@ export default function InternshipApplicantsPage() {
               return (
                 <div
                   key={app.id}
-                  className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6 hover:border-slate-300 transition-all"
+                  className="rounded-2xl p-6 sm:p-8 space-y-6 transition-all hover:border-indigo-500/30"
+                  style={{ background: "rgba(15,23,42,0.85)", backdropFilter: "blur(24px)", border: "1px solid rgba(255,255,255,0.08)", boxShadow: "0 4px 24px -4px rgba(0,0,0,0.4)" }}
                 >
                   {/* Top Bar: Candidate Identity & Status Dropdown */}
-                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b border-slate-100">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
                     <div>
-                      <h3 className="text-lg font-bold text-slate-900">
+                      <h3 className="text-lg font-bold text-white">
                         {student.user.name}
                       </h3>
-                      <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 mt-1">
+                      <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400 mt-1">
                         <span className="flex items-center gap-1">
-                          <Mail className="w-3.5 h-3.5 text-slate-400" />
+                          <Mail className="w-3.5 h-3.5 text-slate-500" />
                           {student.user.email}
                         </span>
                         <span>•</span>
                         <span className="flex items-center gap-1">
-                          <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                          <Calendar className="w-3.5 h-3.5 text-slate-500" />
                           Applied {formatDate(app.appliedAt)}
                         </span>
                       </div>
                       {student.headline && (
-                        <p className="text-xs text-slate-700 font-medium mt-2">
+                        <p className="text-xs text-slate-300 font-medium mt-2">
                           {student.headline}
                         </p>
                       )}
                     </div>
 
                     {/* Interactive Status Changer */}
-                    <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200 p-2 rounded-xl">
-                      <span className="text-xs font-semibold text-slate-600 pl-1">
+                    <div className="flex items-center gap-2.5 p-2 rounded-xl" style={{ background: "rgba(30,41,59,0.8)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                      <span className="text-xs font-semibold text-slate-400 pl-1">
                         Status:
                       </span>
                       <select
@@ -234,7 +240,8 @@ export default function InternshipApplicantsPage() {
                           handleStatusChange(app.id, e.target.value as any)
                         }
                         disabled={updatingId === app.id}
-                        className="text-xs font-semibold rounded-lg border border-slate-300 py-1.5 px-2.5 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-2xs"
+                        className="text-xs font-semibold rounded-lg py-1.5 px-2.5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        style={{ background: "rgba(15,23,42,0.9)", border: "1px solid rgba(255,255,255,0.15)" }}
                       >
                         <option value="APPLIED">Applied</option>
                         <option value="SHORTLISTED">Shortlisted</option>
@@ -253,26 +260,26 @@ export default function InternshipApplicantsPage() {
                         Education & University
                       </span>
                       {edu ? (
-                        <div className="flex items-start gap-2.5 text-slate-700">
-                          <GraduationCap className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                        <div className="flex items-start gap-2.5">
+                          <GraduationCap className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
                           <div>
-                            <p className="font-semibold text-slate-900">
+                            <p className="font-semibold text-white">
                               {edu.degree} in {edu.fieldOfStudy}
                             </p>
-                            <p className="text-slate-500">
+                            <p className="text-slate-400">
                               {edu.institution} ({edu.startYear} –{" "}
                               {edu.endYear || "Present"})
                             </p>
                           </div>
                         </div>
                       ) : (
-                        <span className="text-slate-400 italic">
+                        <span className="text-slate-500 italic">
                           No education listed
                         </span>
                       )}
 
                       {student.bio && (
-                        <p className="text-slate-600 mt-3 leading-relaxed">
+                        <p className="text-slate-400 mt-3 leading-relaxed">
                           {student.bio}
                         </p>
                       )}
@@ -302,7 +309,7 @@ export default function InternshipApplicantsPage() {
                             href={student.githubUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 font-medium hover:bg-slate-200 transition-colors"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/50 text-white font-medium hover:bg-slate-700/50 transition-colors"
                           >
                             GitHub Profile
                             <ExternalLink className="w-3 h-3" />
@@ -314,7 +321,7 @@ export default function InternshipApplicantsPage() {
                             href={student.portfolioUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 font-medium hover:bg-slate-200 transition-colors"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/50 text-white font-medium hover:bg-slate-700/50 transition-colors"
                           >
                             Portfolio Site
                             <ExternalLink className="w-3 h-3" />
@@ -326,7 +333,7 @@ export default function InternshipApplicantsPage() {
                             href={student.linkedinUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 font-medium hover:bg-slate-200 transition-colors"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/50 text-white font-medium hover:bg-slate-700/50 transition-colors"
                           >
                             LinkedIn
                             <ExternalLink className="w-3 h-3" />
@@ -346,7 +353,8 @@ export default function InternshipApplicantsPage() {
                         {student.skills.map((skill) => (
                           <span
                             key={skill}
-                            className="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-medium"
+                            className="px-2.5 py-0.5 rounded-md text-xs font-medium text-blue-300"
+                            style={{ background: "rgba(59,130,246,0.1)", border: "1px solid rgba(59,130,246,0.2)" }}
                           >
                             {skill}
                           </span>
@@ -357,12 +365,12 @@ export default function InternshipApplicantsPage() {
 
                   {/* Candidate Cover Note */}
                   {app.coverNote && (
-                    <div className="pt-4 border-t border-slate-100 text-xs">
-                      <span className="font-semibold text-slate-700 block mb-1">
-                        Candidate's Note:
+                    <div className="pt-4 border-t text-xs" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
+                      <span className="font-semibold text-slate-400 block mb-1">
+                        Candidate&apos;s Note:
                       </span>
-                      <p className="italic text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-200/70">
-                        "{app.coverNote}"
+                      <p className="italic text-slate-300 p-3 rounded-xl" style={{ background: "rgba(30,41,59,0.5)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                        &quot;{app.coverNote}&quot;
                       </p>
                     </div>
                   )}

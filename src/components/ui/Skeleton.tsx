@@ -17,7 +17,7 @@ export function Skeleton({
 
 export function InternshipCardSkeleton() {
   return (
-    <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+    <div className="bg-slate-800/30 p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
           <Skeleton className="w-12 h-12 rounded-lg" />

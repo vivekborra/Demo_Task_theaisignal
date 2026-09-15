@@ -519,7 +519,7 @@ export default async function HomePage() {
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <Link href="/internships">
-              <button className="px-8 py-3.5 rounded-xl text-sm font-bold bg-white text-slate-900 hover:bg-slate-100 shadow-2xl transition-all hover:scale-[1.02] flex items-center gap-2">
+              <button className="px-8 py-3.5 rounded-xl text-sm font-bold bg-slate-900/30 text-white hover:bg-slate-800/50 shadow-2xl transition-all hover:scale-[1.02] flex items-center gap-2">
                 <span>Explore All Internships</span>
                 <ArrowRight className="w-4 h-4" />
               </button>

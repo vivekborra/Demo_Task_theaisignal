@@ -172,12 +172,16 @@ export default function EditInternshipPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8 lg:py-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+    <div className="min-h-screen py-8 lg:py-12 relative overflow-hidden" style={{ background: "transparent" }}>
+      {/* Ambient background glows */}
+      <div className="absolute top-10 left-10 w-96 h-96 bg-indigo-500/8 blur-3xl pointer-events-none rounded-full" />
+      <div className="absolute top-60 right-10 w-96 h-96 bg-blue-500/8 blur-3xl pointer-events-none rounded-full" />
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 relative z-10">
         <div className="mb-4">
           <Link
             href="/recruiter/internships"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-blue-600 transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-blue-300 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Manage Internships
@@ -185,25 +189,33 @@ export default function EditInternshipPage() {
         </div>
 
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
             Edit Internship
           </h1>
-          <p className="text-sm text-slate-600 mt-1">
+          <p className="text-sm text-slate-400 mt-1">
             Update role specifications, requirements, compensation, or status.
           </p>
         </div>
 
         {error && (
-          <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-sm text-rose-800 flex items-center gap-2.5">
-            <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
+          <div className="p-4 rounded-xl text-sm text-rose-300 flex items-center gap-2.5" style={{ background: "rgba(220,38,38,0.1)", border: "1px solid rgba(220,38,38,0.25)" }}>
+            <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
-            <div className="flex items-center gap-2 text-base font-semibold text-slate-900 border-b border-slate-100 pb-3">
-              <Briefcase className="w-5 h-5 text-blue-600" />
+          <div
+            className="rounded-3xl p-6 sm:p-8 space-y-5"
+            style={{
+              background: "rgba(15,23,42,0.85)",
+              backdropFilter: "blur(24px)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              boxShadow: "0 4px 24px -4px rgba(0,0,0,0.4)",
+            }}
+          >
+            <div className="flex items-center gap-2 text-base font-bold text-white border-b border-white/[0.08] pb-3">
+              <Briefcase className="w-5 h-5 text-blue-400" />
               <span>Role Overview</span>
             </div>
 
@@ -247,12 +259,13 @@ export default function EditInternshipPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <Input
-                label="Monthly Stipend ($ USD)"
+                label="Monthly Stipend (₹ INR)"
                 type="number"
                 value={stipend}
                 onChange={(e) => setStipend(Number(e.target.value))}
                 min={0}
                 required
+                helperText="Enter 0 for unpaid / competitive"
               />
 
               <Input
@@ -283,10 +296,18 @@ export default function EditInternshipPage() {
           </div>
 
           {/* Responsibilities */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2 text-base font-semibold text-slate-900">
-                <ListChecks className="w-5 h-5 text-blue-600" />
+          <div
+            className="rounded-3xl p-6 sm:p-8 space-y-4"
+            style={{
+              background: "rgba(15,23,42,0.85)",
+              backdropFilter: "blur(24px)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              boxShadow: "0 4px 24px -4px rgba(0,0,0,0.4)",
+            }}
+          >
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+              <div className="flex items-center gap-2 text-base font-bold text-white">
+                <ListChecks className="w-5 h-5 text-blue-400" />
                 <span>Key Responsibilities</span>
               </div>
               <Button
@@ -308,7 +329,7 @@ export default function EditInternshipPage() {
                     type="text"
                     value={resp}
                     onChange={(e) => handleUpdateResp(idx, e.target.value)}
-                    className="block w-full rounded-lg border border-slate-300 text-sm py-2 px-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="block w-full rounded-lg border border-white/[0.08] text-sm py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                   <button
@@ -324,10 +345,18 @@ export default function EditInternshipPage() {
           </div>
 
           {/* Requirements */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2 text-base font-semibold text-slate-900">
-                <CheckCircle2 className="w-5 h-5 text-blue-600" />
+          <div
+            className="rounded-3xl p-6 sm:p-8 space-y-4"
+            style={{
+              background: "rgba(15,23,42,0.85)",
+              backdropFilter: "blur(24px)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              boxShadow: "0 4px 24px -4px rgba(0,0,0,0.4)",
+            }}
+          >
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+              <div className="flex items-center gap-2 text-base font-bold text-white">
+                <CheckCircle2 className="w-5 h-5 text-blue-400" />
                 <span>Requirements & Eligibility</span>
               </div>
               <Button
@@ -349,7 +378,7 @@ export default function EditInternshipPage() {
                     type="text"
                     value={req}
                     onChange={(e) => handleUpdateReq(idx, e.target.value)}
-                    className="block w-full rounded-lg border border-slate-300 text-sm py-2 px-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="block w-full rounded-lg border border-white/[0.08] text-sm py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                   <button
@@ -365,8 +394,16 @@ export default function EditInternshipPage() {
           </div>
 
           {/* Skills */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4">
-            <div className="flex items-center gap-2 text-base font-semibold text-slate-900 border-b border-slate-100 pb-3">
+          <div
+            className="rounded-3xl p-6 sm:p-8 space-y-4"
+            style={{
+              background: "rgba(15,23,42,0.85)",
+              backdropFilter: "blur(24px)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              boxShadow: "0 4px 24px -4px rgba(0,0,0,0.4)",
+            }}
+          >
+            <div className="flex items-center gap-2 text-base font-bold text-white border-b border-white/[0.08] pb-3">
               <span>Required Tech Skills</span>
             </div>
 
@@ -377,7 +414,7 @@ export default function EditInternshipPage() {
                 onChange={(e) => setSkillsInput(e.target.value)}
                 onKeyDown={handleAddSkill}
                 placeholder="e.g. Next.js, Docker (Press Enter)"
-                className="block w-full rounded-lg border border-slate-300 text-sm py-2 px-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="block w-full rounded-lg border border-white/[0.08] text-sm py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <Button
                 type="button"
@@ -395,13 +432,13 @@ export default function EditInternshipPage() {
               {skills.map((skill) => (
                 <span
                   key={skill}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-800"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-slate-800/50 text-white"
                 >
                   {skill}
                   <button
                     type="button"
                     onClick={() => setSkills(skills.filter((s) => s !== skill))}
-                    className="text-slate-500 hover:text-slate-900"
+                    className="text-slate-400 hover:text-white"
                   >
                     ×
                   </button>
