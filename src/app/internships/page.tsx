@@ -8,7 +8,7 @@ import { InternshipCard, InternshipItem } from "@/components/internships/Interns
 import { Pagination } from "@/components/internships/Pagination";
 import { InternshipCardSkeleton } from "@/components/ui/Skeleton";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { Briefcase, SlidersHorizontal } from "lucide-react";
+import { Briefcase, SlidersHorizontal, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 function InternshipsContent() {
@@ -108,31 +108,37 @@ function InternshipsContent() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8 lg:py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-8 lg:py-12 relative overflow-hidden" style={{ background: "transparent" }}>
+      {/* Ambient background glows */}
+      <div className="absolute top-20 -left-40 w-96 h-96 bg-blue-500/8 blur-3xl pointer-events-none rounded-full" />
+      <div className="absolute top-80 -right-40 w-96 h-96 bg-indigo-500/8 blur-3xl pointer-events-none rounded-full" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Marketplace Header */}
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                Explore Internships
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full pill-blue text-xs font-semibold mb-2">
+                <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+                <span>Verified Engineering & Tech Openings</span>
+              </div>
+              <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+                Explore Tech Internships
               </h1>
-              <p className="text-sm text-slate-600 mt-1">
-                Verified high-impact software, data science, AI, and design roles.
+              <p className="text-sm text-slate-400 mt-1">
+                Verified high-impact software, AI, data science, and cloud roles across top Indian tech hubs.
               </p>
             </div>
 
             {/* Mobile Filter Toggle Button */}
             <div className="md:hidden">
-              <Button
-                variant="outline"
-                size="sm"
+              <button
                 onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
-                className="w-full flex items-center justify-center gap-2"
+                className="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-slate-300 bg-slate-800/80 border border-white/[0.1] hover:text-white flex items-center justify-center gap-2 transition-all cursor-pointer"
               >
-                <SlidersHorizontal className="w-4 h-4" />
+                <SlidersHorizontal className="w-4 h-4 text-blue-400" />
                 {mobileFilterOpen ? "Hide Filters" : "Show Filters"}
-              </Button>
+              </button>
             </div>
           </div>
 
@@ -172,17 +178,17 @@ function InternshipsContent() {
 
           {/* Internship Results Grid */}
           <div className="lg:col-span-3 space-y-6">
-            <div className="flex items-center justify-between text-xs text-slate-500 pb-1">
+            <div className="flex items-center justify-between text-xs text-slate-400 pb-1">
               <span>
                 Showing{" "}
-                <span className="font-semibold text-slate-900">
+                <span className="font-bold text-white">
                   {totalResults}
                 </span>{" "}
-                opportunities
+                verified opportunities
               </span>
               {q && (
                 <span>
-                  Query: <span className="font-medium text-blue-600">"{q}"</span>
+                  Query: <span className="font-medium text-blue-400">"{q}"</span>
                 </span>
               )}
             </div>

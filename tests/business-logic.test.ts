@@ -94,13 +94,30 @@ async function runTests() {
 
   // Test 2: Expired internship cannot accept applications
   await test('Expired internship validation: Application logic rejects submissions after deadline', async () => {
-    const expiredInternship = await prisma.internship.findFirst({
+    let expiredInternship = await prisma.internship.findFirst({
       where: {
         deadline: { lt: new Date() },
       },
     });
 
-    assert(expiredInternship, 'Expired internship must exist in seed');
+    if (!expiredInternship) {
+      expiredInternship = await prisma.internship.create({
+        data: {
+          companyId: recruiter.company!.id,
+          title: 'Expired Verification Internship',
+          description: 'Temporary internship used to validate that expired postings reject new applications.',
+          responsibilities: ['Validate deadline rules'],
+          requirements: ['Must be expired'],
+          skills: ['Verification'],
+          location: 'Remote',
+          workMode: WorkMode.REMOTE,
+          stipend: 2000,
+          durationMonths: 1,
+          deadline: new Date(Date.now() - 24 * 60 * 60 * 1000),
+          status: InternshipStatus.PUBLISHED,
+        },
+      });
+    }
 
     // Simulate the business validation in /api/internships/[id]/apply
     const isPastDeadline = new Date(expiredInternship.deadline).getTime() < Date.now();

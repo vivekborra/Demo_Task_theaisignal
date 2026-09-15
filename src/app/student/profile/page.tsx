@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
-import { Button } from "@/components/ui/Button";
 import {
   User,
   GraduationCap,
@@ -14,6 +13,7 @@ import {
   AlertCircle,
   ExternalLink,
   Code2,
+  Sparkles,
 } from "lucide-react";
 
 interface EducationItem {
@@ -88,34 +88,34 @@ export default function StudentProfilePage() {
     setEducation([
       ...education,
       {
-        degree: "Bachelor of Science",
         institution: "",
-        fieldOfStudy: "Computer Science",
-        startYear: new Date().getFullYear() - 2,
+        degree: "",
+        fieldOfStudy: "",
+        startYear: new Date().getFullYear(),
         endYear: new Date().getFullYear() + 2,
       },
     ]);
+  };
+
+  const handleUpdateEducation = (
+    index: number,
+    field: keyof EducationItem,
+    value: any
+  ) => {
+    const updated = [...education];
+    updated[index] = { ...updated[index], [field]: value };
+    setEducation(updated);
   };
 
   const handleRemoveEducation = (index: number) => {
     setEducation(education.filter((_, i) => i !== index));
   };
 
-  const handleUpdateEducation = (
-    index: number,
-    field: keyof EducationItem,
-    val: any
-  ) => {
-    const updated = [...education];
-    updated[index] = { ...updated[index], [field]: val };
-    setEducation(updated);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    setSuccessMsg(null);
     setErrorMsg(null);
+    setSuccessMsg(null);
 
     try {
       const res = await fetch("/api/profile", {
@@ -151,55 +151,76 @@ export default function StudentProfilePage() {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto py-12 px-4 animate-pulse space-y-6">
-        <div className="h-8 w-48 bg-slate-200 rounded-lg" />
-        <div className="h-64 bg-slate-200 rounded-2xl" />
-        <div className="h-64 bg-slate-200 rounded-2xl" />
+        <div className="h-8 w-48 bg-slate-800 rounded-lg" />
+        <div className="h-64 bg-slate-800/80 rounded-2xl" />
+        <div className="h-64 bg-slate-800/80 rounded-2xl" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8 lg:py-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-8 lg:py-12 relative overflow-hidden" style={{ background: "transparent" }}>
+      {/* Ambient background glows */}
+      <div className="absolute top-10 left-10 w-96 h-96 bg-blue-500/8 blur-3xl pointer-events-none rounded-full" />
+      <div className="absolute top-60 right-10 w-96 h-96 bg-indigo-500/8 blur-3xl pointer-events-none rounded-full" />
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full pill-blue text-xs font-semibold mb-2">
+              <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+              <span>Verified Candidate Profile</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
               Student Profile
             </h1>
-            <p className="text-sm text-slate-600 mt-1">
-              Keep your profile up-to-date. Recruiters see this information when you apply.
+            <p className="text-sm text-slate-400 mt-1">
+              Recruiters see this information automatically when you submit applications.
             </p>
           </div>
 
-          <Button
+          <button
             onClick={handleSubmit}
-            size="md"
-            isLoading={saving}
-            className="shadow-sm self-start sm:self-auto"
+            disabled={saving}
+            className="px-6 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer self-start sm:self-auto"
           >
-            Save Changes
-          </Button>
+            {saving ? "Saving Changes..." : "Save Changes"}
+          </button>
         </div>
 
         {successMsg && (
-          <div className="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-sm text-emerald-800 flex items-center gap-2.5">
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+          <div
+            className="mb-6 p-4 rounded-2xl text-xs text-emerald-300 flex items-center gap-2.5"
+            style={{ background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.25)" }}
+          >
+            <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
             <span>{successMsg}</span>
           </div>
         )}
 
         {errorMsg && (
-          <div className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-sm text-rose-800 flex items-center gap-2.5">
-            <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
+          <div
+            className="mb-6 p-4 rounded-2xl text-xs text-rose-300 flex items-center gap-2.5"
+            style={{ background: "rgba(220,38,38,0.1)", border: "1px solid rgba(220,38,38,0.25)" }}
+          >
+            <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Basic Info Card */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
-            <div className="flex items-center gap-2 text-base font-semibold text-slate-900 border-b border-slate-100 pb-3">
-              <User className="w-5 h-5 text-blue-600" />
+          <div
+            className="rounded-3xl p-6 sm:p-8 space-y-5"
+            style={{
+              background: "rgba(15,23,42,0.85)",
+              backdropFilter: "blur(24px)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              boxShadow: "0 4px 24px -4px rgba(0,0,0,0.4)",
+            }}
+          >
+            <div className="flex items-center gap-2 text-base font-bold text-white border-b border-white/[0.08] pb-3">
+              <User className="w-5 h-5 text-blue-400" />
               <span>General Information</span>
             </div>
 
@@ -214,29 +235,37 @@ export default function StudentProfilePage() {
               label="Headline"
               value={headline}
               onChange={(e) => setHeadline(e.target.value)}
-              placeholder="e.g. Junior CS Student at UC Berkeley | Full-Stack & Systems"
-              helperText="A punchy 1-line summary that recruiters see on your candidate card."
+              placeholder="e.g. 3rd Year CS Student at IIT Delhi | Distributed Systems & GenAI"
+              helperText="A punchy 1-line summary that recruiters see on your applicant card."
             />
 
             <Textarea
               label="About / Bio"
               value={bio}
               onChange={(e) => setBio(e.target.value)}
-              placeholder="Share your interests, key achievements, and the types of engineering projects you enjoy building..."
+              placeholder="Share your technical interests, hackathon projects, and what engineering challenges excite you..."
               rows={4}
             />
           </div>
 
           {/* Technical Skills Card */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
-            <div className="flex items-center gap-2 text-base font-semibold text-slate-900 border-b border-slate-100 pb-3">
-              <Code2 className="w-5 h-5 text-blue-600" />
+          <div
+            className="rounded-3xl p-6 sm:p-8 space-y-5"
+            style={{
+              background: "rgba(15,23,42,0.85)",
+              backdropFilter: "blur(24px)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              boxShadow: "0 4px 24px -4px rgba(0,0,0,0.4)",
+            }}
+          >
+            <div className="flex items-center gap-2 text-base font-bold text-white border-b border-white/[0.08] pb-3">
+              <Code2 className="w-5 h-5 text-blue-400" />
               <span>Technical Skills</span>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                Add Skills (Type and press Enter)
+              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                Add Skills (Type and press Enter or click Add)
               </label>
               <div className="flex gap-2">
                 <input
@@ -244,19 +273,17 @@ export default function StudentProfilePage() {
                   value={newSkillInput}
                   onChange={(e) => setNewSkillInput(e.target.value)}
                   onKeyDown={handleAddSkill}
-                  placeholder="e.g. TypeScript, React, Docker, PyTorch"
-                  className="block w-full rounded-lg border border-slate-300 text-sm py-2 px-3 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="e.g. TypeScript, React, Docker, PyTorch, Go"
+                  className="block w-full rounded-xl border border-white/[0.1] text-sm py-2.5 px-3.5 text-white placeholder:text-slate-500 bg-slate-900/80 focus:outline-none focus:border-blue-500"
                 />
-                <Button
+                <button
                   type="button"
-                  variant="outline"
-                  size="sm"
                   onClick={handleAddSkill}
-                  className="shrink-0"
+                  className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 transition-all flex items-center gap-1 shrink-0 cursor-pointer"
                 >
-                  <Plus className="w-4 h-4 mr-1" />
+                  <Plus className="w-4 h-4" />
                   Add
-                </Button>
+                </button>
               </div>
             </div>
 
@@ -264,20 +291,20 @@ export default function StudentProfilePage() {
               {skills.map((skill) => (
                 <span
                   key={skill}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200/60"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold bg-slate-800/90 text-blue-300 border border-white/[0.08]"
                 >
                   {skill}
                   <button
                     type="button"
                     onClick={() => handleRemoveSkill(skill)}
-                    className="hover:text-blue-900"
+                    className="hover:text-rose-400 text-slate-400 transition-colors ml-1 cursor-pointer"
                   >
                     ×
                   </button>
                 </span>
               ))}
               {skills.length === 0 && (
-                <p className="text-xs text-slate-400 italic">
+                <p className="text-xs text-slate-500 italic">
                   No skills added yet. Add skills to match with recruiter job descriptions.
                 </p>
               )}
@@ -285,18 +312,26 @@ export default function StudentProfilePage() {
           </div>
 
           {/* Links & Portfolio Card */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
-            <div className="flex items-center gap-2 text-base font-semibold text-slate-900 border-b border-slate-100 pb-3">
-              <ExternalLink className="w-5 h-5 text-blue-600" />
+          <div
+            className="rounded-3xl p-6 sm:p-8 space-y-5"
+            style={{
+              background: "rgba(15,23,42,0.85)",
+              backdropFilter: "blur(24px)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              boxShadow: "0 4px 24px -4px rgba(0,0,0,0.4)",
+            }}
+          >
+            <div className="flex items-center gap-2 text-base font-bold text-white border-b border-white/[0.08] pb-3">
+              <ExternalLink className="w-5 h-5 text-blue-400" />
               <span>Resume & Web Links</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
-                label="Resume URL (PDF / Cloud Link)"
+                label="Resume URL (PDF / Google Drive)"
                 value={resumeUrl}
                 onChange={(e) => setResumeUrl(e.target.value)}
-                placeholder="https://yourname.dev/resume.pdf"
+                placeholder="https://drive.google.com/your-resume.pdf"
               />
               <Input
                 label="Portfolio / Personal Website"
@@ -320,38 +355,45 @@ export default function StudentProfilePage() {
           </div>
 
           {/* Education History Card */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2 text-base font-semibold text-slate-900">
-                <GraduationCap className="w-5 h-5 text-blue-600" />
+          <div
+            className="rounded-3xl p-6 sm:p-8 space-y-5"
+            style={{
+              background: "rgba(15,23,42,0.85)",
+              backdropFilter: "blur(24px)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              boxShadow: "0 4px 24px -4px rgba(0,0,0,0.4)",
+            }}
+          >
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+              <div className="flex items-center gap-2 text-base font-bold text-white">
+                <GraduationCap className="w-5 h-5 text-blue-400" />
                 <span>Education</span>
               </div>
-              <Button
+              <button
                 type="button"
-                variant="outline"
-                size="sm"
                 onClick={handleAddEducation}
-                className="gap-1 text-xs"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-blue-300 bg-blue-500/15 border border-blue-500/30 hover:bg-blue-500/25 flex items-center gap-1 cursor-pointer transition-all"
               >
                 <Plus className="w-3.5 h-3.5" />
                 Add School
-              </Button>
+              </button>
             </div>
 
             <div className="space-y-4">
               {education.map((edu, idx) => (
                 <div
                   key={idx}
-                  className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 relative space-y-4"
+                  className="p-5 rounded-2xl border border-white/[0.08] relative space-y-4"
+                  style={{ background: "rgba(30,41,59,0.5)" }}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
                       Entry #{idx + 1}
                     </span>
                     <button
                       type="button"
                       onClick={() => handleRemoveEducation(idx)}
-                      className="p-1 rounded text-rose-500 hover:bg-rose-50 transition-colors"
+                      className="p-1 rounded-lg text-rose-400 hover:bg-rose-500/15 transition-colors cursor-pointer"
                       title="Remove education"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -365,7 +407,7 @@ export default function StudentProfilePage() {
                       onChange={(e) =>
                         handleUpdateEducation(idx, "institution", e.target.value)
                       }
-                      placeholder="e.g. University of Washington"
+                      placeholder="e.g. IIT Delhi, BITS Pilani"
                       required
                     />
                     <Input
@@ -374,7 +416,7 @@ export default function StudentProfilePage() {
                       onChange={(e) =>
                         handleUpdateEducation(idx, "degree", e.target.value)
                       }
-                      placeholder="e.g. Bachelor of Science"
+                      placeholder="e.g. Bachelor of Technology"
                       required
                     />
                     <Input
@@ -383,7 +425,7 @@ export default function StudentProfilePage() {
                       onChange={(e) =>
                         handleUpdateEducation(idx, "fieldOfStudy", e.target.value)
                       }
-                      placeholder="e.g. Computer Science"
+                      placeholder="e.g. Computer Science & Engineering"
                       required
                     />
                     <div className="grid grid-cols-2 gap-2">
@@ -419,17 +461,21 @@ export default function StudentProfilePage() {
               ))}
 
               {education.length === 0 && (
-                <p className="text-xs text-slate-400 italic text-center py-4">
-                  No education entries recorded yet. Click "Add School" to add your university.
+                <p className="text-xs text-slate-500 italic text-center py-4">
+                  No education entries recorded yet. Click "Add School" to add your college or university.
                 </p>
               )}
             </div>
           </div>
 
           <div className="flex justify-end pt-4">
-            <Button type="submit" size="lg" isLoading={saving} className="shadow-sm">
-              Save Profile Changes
-            </Button>
+            <button
+              type="submit"
+              disabled={saving}
+              className="px-8 py-3.5 rounded-xl text-sm font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.01] active:scale-[0.98] transition-all cursor-pointer"
+            >
+              {saving ? "Saving Changes..." : "Save Profile Changes"}
+            </button>
           </div>
         </form>
       </div>

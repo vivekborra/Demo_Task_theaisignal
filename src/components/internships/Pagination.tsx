@@ -22,18 +22,18 @@ export function Pagination({
   const endResult = Math.min(currentPage * pageSize, totalResults);
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 border-t border-slate-200 text-xs text-slate-600">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-6 border-t border-white/[0.08] text-xs text-slate-400">
       <div>
-        Showing <span className="font-semibold text-slate-900">{startResult}</span> to{" "}
-        <span className="font-semibold text-slate-900">{endResult}</span> of{" "}
-        <span className="font-semibold text-slate-900">{totalResults}</span> internships
+        Showing <span className="font-semibold text-white">{startResult}</span> to{" "}
+        <span className="font-semibold text-white">{endResult}</span> of{" "}
+        <span className="font-semibold text-white">{totalResults}</span> opportunities
       </div>
 
       <div className="flex items-center gap-1.5">
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 1}
-          className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="p-2 rounded-xl border border-white/[0.1] bg-slate-900/80 text-slate-400 hover:text-white hover:border-white/[0.2] disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
           aria-label="Previous Page"
         >
           <ChevronLeft className="w-4 h-4" />
@@ -43,10 +43,10 @@ export function Pagination({
           <button
             key={pageNum}
             onClick={() => onPageChange(pageNum)}
-            className={`w-8 h-8 rounded-lg font-medium text-xs transition-colors ${
+            className={`w-8 h-8 rounded-xl font-bold text-xs transition-all cursor-pointer ${
               pageNum === currentPage
-                ? "bg-blue-600 text-white shadow-sm"
-                : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50"
+                ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25"
+                : "bg-slate-900/80 border border-white/[0.08] text-slate-400 hover:text-white hover:border-white/[0.2]"
             }`}
           >
             {pageNum}
@@ -56,7 +56,7 @@ export function Pagination({
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
-          className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="p-2 rounded-xl border border-white/[0.1] bg-slate-900/80 text-slate-400 hover:text-white hover:border-white/[0.2] disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
           aria-label="Next Page"
         >
           <ChevronRight className="w-4 h-4" />

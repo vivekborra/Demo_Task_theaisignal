@@ -3,11 +3,13 @@ import Link from "next/link";
 import {
   MapPin,
   Clock,
-  DollarSign,
+  Banknote,
   Calendar,
   Building2,
   ArrowRight,
   Sparkles,
+  CheckCircle2,
+  Users,
 } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { formatCurrency, formatRelativeTime, isPastDeadline } from "@/lib/utils";
@@ -43,35 +45,75 @@ export function InternshipCard({ internship }: InternshipCardProps) {
   const isExpired = isPastDeadline(internship.deadline);
   const isClosed = internship.status === "CLOSED";
 
-  const workModeBadge = {
-    REMOTE: { label: "Remote", variant: "success" as const },
-    HYBRID: { label: "Hybrid", variant: "info" as const },
-    ONSITE: { label: "On-site", variant: "default" as const },
+  const workModeStyles = {
+    REMOTE: {
+      label: "Remote",
+      pill: "pill-emerald",
+      dot: "bg-emerald-400",
+    },
+    HYBRID: {
+      label: "Hybrid",
+      pill: "pill-blue",
+      dot: "bg-blue-400",
+    },
+    ONSITE: {
+      label: "On-site",
+      pill: "bg-slate-700/60 text-slate-300 border border-slate-600/50",
+      dot: "bg-slate-400",
+    },
   }[internship.workMode];
 
+  // Deterministic gradient from company name
+  const getCompanyGradient = (name: string) => {
+    const gradients = [
+      "from-blue-500 to-indigo-600",
+      "from-violet-500 to-purple-600",
+      "from-emerald-500 to-teal-600",
+      "from-amber-500 to-orange-600",
+      "from-rose-500 to-pink-600",
+      "from-cyan-500 to-sky-600",
+    ];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return gradients[Math.abs(hash) % gradients.length];
+  };
+
   return (
-    <div className="group relative bg-white rounded-xl border border-slate-200/90 hover:border-blue-400 p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between">
+    <div className="group relative rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 bg-[rgba(17,24,39,0.80)] border border-white/[0.08] hover:border-indigo-500/45 hover:shadow-[0_0_0_1px_rgba(99,102,241,0.15),_0_20px_60px_-15px_rgba(59,130,246,0.18)]"
+      style={{
+        backdropFilter: "blur(24px)",
+        WebkitBackdropFilter: "blur(24px)",
+      }}
+    >
+      {/* Subtle top accent line */}
+      <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
       <div>
         {/* Header: Company & Badges */}
-        <div className="flex items-start justify-between gap-4 mb-3">
+        <div className="flex items-start justify-between gap-4 mb-4">
           <div className="flex items-center gap-3.5">
             {internship.company.logoUrl ? (
               <img
                 src={internship.company.logoUrl}
                 alt={internship.company.name}
-                className="w-12 h-12 rounded-xl object-cover border border-slate-100 shadow-sm bg-slate-50"
+                className="w-12 h-12 rounded-xl object-cover border border-white/10 bg-slate-800 shrink-0"
               />
             ) : (
-              <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-700 font-bold text-lg shadow-sm">
+              <div
+                className={`w-12 h-12 rounded-xl bg-gradient-to-tr ${getCompanyGradient(internship.company.name)} flex items-center justify-center text-white font-bold text-lg shadow-lg shrink-0`}
+              >
                 {internship.company.name.charAt(0).toUpperCase()}
               </div>
             )}
-            <div>
-              <h4 className="text-sm font-medium text-slate-600 flex items-center gap-1.5">
-                {internship.company.name}
-              </h4>
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-400">
+                <span className="truncate">{internship.company.name}</span>
+                <CheckCircle2 className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+              </div>
               <Link href={`/internships/${internship.id}`}>
-                <h3 className="text-lg font-semibold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-1">
+                <h3 className="text-base sm:text-lg font-bold text-slate-100 group-hover:text-blue-300 transition-colors line-clamp-1 mt-0.5">
                   {internship.title}
                 </h3>
               </Link>
@@ -80,41 +122,51 @@ export function InternshipCard({ internship }: InternshipCardProps) {
 
           <div className="flex flex-col items-end gap-1.5 shrink-0">
             {isClosed ? (
-              <Badge variant="danger" size="sm">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/15 text-rose-300 border border-rose-500/25">
                 Closed
-              </Badge>
+              </span>
             ) : isExpired ? (
-              <Badge variant="warning" size="sm">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/25">
                 Expired
-              </Badge>
+              </span>
             ) : (
-              <Badge variant={workModeBadge.variant} size="sm">
-                {workModeBadge.label}
-              </Badge>
+              <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium ${workModeStyles.pill}`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${workModeStyles.dot}`} />
+                {workModeStyles.label}
+              </span>
             )}
           </div>
         </div>
 
-        {/* Quick Meta Stats */}
-        <div className="flex flex-wrap items-center gap-y-2 gap-x-4 text-xs text-slate-500 mb-4 mt-2">
-          <span className="flex items-center gap-1">
-            <MapPin className="w-3.5 h-3.5 text-slate-400" />
-            {internship.location}
-          </span>
-          <span className="flex items-center gap-1 font-semibold text-slate-700">
-            <DollarSign className="w-3.5 h-3.5 text-emerald-600" />
-            {internship.stipend > 0
-              ? `${formatCurrency(internship.stipend)} / mo`
-              : "Competitive / Unpaid"}
-          </span>
-          <span className="flex items-center gap-1">
-            <Clock className="w-3.5 h-3.5 text-slate-400" />
-            {internship.durationMonths} Month{internship.durationMonths > 1 ? "s" : ""}
-          </span>
+        {/* Quick Meta Badges */}
+        <div className="flex flex-wrap items-center gap-2 text-xs mb-4">
+          {/* Stipend Pill */}
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-bold pill-emerald">
+            <Banknote className="w-3.5 h-3.5 shrink-0" />
+            <span>
+              {internship.stipend > 0
+                ? `${formatCurrency(internship.stipend, internship.location)} / mo`
+                : "Competitive / Unpaid"}
+            </span>
+          </div>
+
+          {/* Location */}
+          <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800/70 text-slate-400 border border-white/[0.07] font-medium">
+            <MapPin className="w-3 h-3 text-slate-500" />
+            <span className="truncate max-w-[140px]">{internship.location}</span>
+          </div>
+
+          {/* Duration */}
+          <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800/70 text-slate-400 border border-white/[0.07] font-medium">
+            <Clock className="w-3 h-3 text-slate-500" />
+            <span>
+              {internship.durationMonths} Month{internship.durationMonths > 1 ? "s" : ""}
+            </span>
+          </div>
         </div>
 
         {/* Short Description */}
-        <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-4">
+        <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-4">
           {internship.description}
         </p>
 
@@ -123,13 +175,13 @@ export function InternshipCard({ internship }: InternshipCardProps) {
           {internship.skills.slice(0, 4).map((skill) => (
             <span
               key={skill}
-              className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors"
+              className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-medium bg-slate-800/80 text-slate-300 border border-white/[0.07] hover:border-blue-500/40 hover:text-blue-300 transition-colors"
             >
               {skill}
             </span>
           ))}
           {internship.skills.length > 4 && (
-            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] text-slate-500">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium text-slate-500 bg-slate-800/60 border border-white/[0.06]">
               +{internship.skills.length - 4} more
             </span>
           )}
@@ -137,18 +189,25 @@ export function InternshipCard({ internship }: InternshipCardProps) {
       </div>
 
       {/* Footer / CTA Bar */}
-      <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+      <div className="pt-3.5 border-t border-white/[0.07] flex items-center justify-between text-xs text-slate-500">
         <div className="flex items-center gap-2">
-          <span>{formatRelativeTime(internship.createdAt)}</span>
-          <span>•</span>
-          <span className={isExpired ? "text-rose-500 font-medium" : "text-slate-500"}>
-            {formatRelativeTime(internship.deadline)}
+          {internship._count && internship._count.applications > 0 ? (
+            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded-md">
+              <Users className="w-3 h-3" />
+              {internship._count.applications} applied
+            </span>
+          ) : (
+            <span className="text-[11px] text-slate-600">Be the first to apply</span>
+          )}
+          <span className="text-slate-700">•</span>
+          <span className={isExpired ? "text-rose-400 font-medium" : "text-slate-600 text-[11px]"}>
+            Due: {new Date(internship.deadline).toLocaleDateString("en-IN", { month: "short", day: "numeric" })}
           </span>
         </div>
 
         <Link
           href={`/internships/${internship.id}`}
-          className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 group-hover:translate-x-0.5 transition-all"
+          className="inline-flex items-center gap-1 text-xs font-bold text-blue-400 hover:text-blue-300 group-hover:translate-x-0.5 transition-all"
         >
           View Details
           <ArrowRight className="w-3.5 h-3.5" />

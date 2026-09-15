@@ -6,15 +6,15 @@ import Link from "next/link";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Select } from "@/components/ui/Select";
-import { Button } from "@/components/ui/Button";
 import {
   ArrowLeft,
   Plus,
   Trash2,
   AlertCircle,
-  CheckCircle2,
   Briefcase,
   ListChecks,
+  CheckCircle2,
+  Sparkles,
 } from "lucide-react";
 
 export default function NewInternshipPage() {
@@ -26,7 +26,7 @@ export default function NewInternshipPage() {
   const [workMode, setWorkMode] = useState<"REMOTE" | "HYBRID" | "ONSITE">(
     "REMOTE"
   );
-  const [stipend, setStipend] = useState<number>(2500);
+  const [stipend, setStipend] = useState<number>(45000);
   const [durationMonths, setDurationMonths] = useState<number>(3);
   const [deadline, setDeadline] = useState(
     new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]
@@ -35,7 +35,7 @@ export default function NewInternshipPage() {
   const [skills, setSkills] = useState<string[]>([
     "TypeScript",
     "React",
-    "TailwindCSS",
+    "Node.js",
   ]);
 
   const [responsibilities, setResponsibilities] = useState<string[]>([
@@ -98,20 +98,8 @@ export default function NewInternshipPage() {
     const cleanResponsibilities = responsibilities.filter((r) => r.trim());
     const cleanRequirements = requirements.filter((r) => r.trim());
 
-    if (cleanResponsibilities.length === 0) {
-      setError("Please provide at least one key responsibility.");
-      setLoading(false);
-      return;
-    }
-
-    if (cleanRequirements.length === 0) {
-      setError("Please provide at least one eligibility requirement.");
-      setLoading(false);
-      return;
-    }
-
-    if (skills.length === 0) {
-      setError("Please add at least one relevant technical skill tag.");
+    if (!title.trim() || !description.trim() || !location.trim()) {
+      setError("Please fill out all required fields.");
       setLoading(false);
       return;
     }
@@ -121,12 +109,12 @@ export default function NewInternshipPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          title,
-          description,
-          location,
+          title: title.trim(),
+          description: description.trim(),
+          location: location.trim(),
           workMode,
-          stipend: Number(stipend),
-          durationMonths: Number(durationMonths),
+          stipend: Number(stipend) || 0,
+          durationMonths: Number(durationMonths) || 1,
           deadline: new Date(deadline).toISOString(),
           skills,
           responsibilities: cleanResponsibilities,
@@ -152,12 +140,16 @@ export default function NewInternshipPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8 lg:py-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-8 lg:py-12 relative overflow-hidden" style={{ background: "transparent" }}>
+      {/* Ambient background glows */}
+      <div className="absolute top-10 left-10 w-96 h-96 bg-blue-500/8 blur-3xl pointer-events-none rounded-full" />
+      <div className="absolute top-60 right-10 w-96 h-96 bg-indigo-500/8 blur-3xl pointer-events-none rounded-full" />
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-6">
           <Link
             href="/recruiter/internships"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-blue-600 transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-blue-300 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Manage Internships
@@ -165,26 +157,41 @@ export default function NewInternshipPage() {
         </div>
 
         <div className="mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full pill-blue text-xs font-semibold mb-2">
+            <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+            <span>Recruiter Opportunity Publisher</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
             Post an Internship
           </h1>
-          <p className="text-sm text-slate-600 mt-1">
+          <p className="text-sm text-slate-400 mt-1">
             Publish a new role to connect with thousands of vetted students.
           </p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-sm text-rose-800 flex items-center gap-2.5">
-            <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
+          <div
+            className="mb-6 p-4 rounded-2xl text-xs text-rose-300 flex items-center gap-2.5 animate-in fade-in"
+            style={{ background: "rgba(220,38,38,0.1)", border: "1px solid rgba(220,38,38,0.25)" }}
+          >
+            <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Basic Details */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-5">
-            <div className="flex items-center gap-2 text-base font-semibold text-slate-900 border-b border-slate-100 pb-3">
-              <Briefcase className="w-5 h-5 text-blue-600" />
+          <div
+            className="rounded-3xl p-6 sm:p-8 space-y-5"
+            style={{
+              background: "rgba(15,23,42,0.85)",
+              backdropFilter: "blur(24px)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              boxShadow: "0 4px 24px -4px rgba(0,0,0,0.4)",
+            }}
+          >
+            <div className="flex items-center gap-2 text-base font-bold text-white border-b border-white/[0.08] pb-3">
+              <Briefcase className="w-5 h-5 text-blue-400" />
               <span>Role Overview</span>
             </div>
 
@@ -212,7 +219,7 @@ export default function NewInternshipPage() {
                 label="Location (City, State / Remote)"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                placeholder="e.g. San Francisco, CA or Remote"
+                placeholder="e.g. Bengaluru, India or Remote"
                 required
               />
 
@@ -229,7 +236,7 @@ export default function NewInternshipPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <Input
-                label="Monthly Stipend ($ USD)"
+                label="Monthly Stipend (₹ INR)"
                 type="number"
                 value={stipend}
                 onChange={(e) => setStipend(Number(e.target.value))}
@@ -268,22 +275,28 @@ export default function NewInternshipPage() {
           </div>
 
           {/* Key Responsibilities */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2 text-base font-semibold text-slate-900">
-                <ListChecks className="w-5 h-5 text-blue-600" />
+          <div
+            className="rounded-3xl p-6 sm:p-8 space-y-4"
+            style={{
+              background: "rgba(15,23,42,0.85)",
+              backdropFilter: "blur(24px)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              boxShadow: "0 4px 24px -4px rgba(0,0,0,0.4)",
+            }}
+          >
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+              <div className="flex items-center gap-2 text-base font-bold text-white">
+                <ListChecks className="w-5 h-5 text-blue-400" />
                 <span>Key Responsibilities</span>
               </div>
-              <Button
+              <button
                 type="button"
-                variant="outline"
-                size="sm"
                 onClick={handleAddResp}
-                className="gap-1 text-xs"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-blue-300 bg-blue-500/15 border border-blue-500/30 hover:bg-blue-500/25 flex items-center gap-1 cursor-pointer transition-all"
               >
                 <Plus className="w-3.5 h-3.5" />
                 Add Item
-              </Button>
+              </button>
             </div>
 
             <div className="space-y-3">
@@ -294,14 +307,14 @@ export default function NewInternshipPage() {
                     value={resp}
                     onChange={(e) => handleUpdateResp(idx, e.target.value)}
                     placeholder={`Responsibility #${idx + 1}`}
-                    className="block w-full rounded-lg border border-slate-300 text-sm py-2 px-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="block w-full rounded-xl border border-white/[0.1] text-sm py-2.5 px-3.5 text-white bg-slate-900/80 focus:outline-none focus:border-blue-500"
                     required
                   />
                   {responsibilities.length > 1 && (
                     <button
                       type="button"
                       onClick={() => handleRemoveResp(idx)}
-                      className="p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors shrink-0"
+                      className="p-2 text-rose-400 hover:bg-rose-500/15 rounded-xl transition-colors shrink-0 cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -312,22 +325,28 @@ export default function NewInternshipPage() {
           </div>
 
           {/* Requirements */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2 text-base font-semibold text-slate-900">
-                <CheckCircle2 className="w-5 h-5 text-blue-600" />
+          <div
+            className="rounded-3xl p-6 sm:p-8 space-y-4"
+            style={{
+              background: "rgba(15,23,42,0.85)",
+              backdropFilter: "blur(24px)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              boxShadow: "0 4px 24px -4px rgba(0,0,0,0.4)",
+            }}
+          >
+            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+              <div className="flex items-center gap-2 text-base font-bold text-white">
+                <CheckCircle2 className="w-5 h-5 text-blue-400" />
                 <span>Requirements & Eligibility</span>
               </div>
-              <Button
+              <button
                 type="button"
-                variant="outline"
-                size="sm"
                 onClick={handleAddReq}
-                className="gap-1 text-xs"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-blue-300 bg-blue-500/15 border border-blue-500/30 hover:bg-blue-500/25 flex items-center gap-1 cursor-pointer transition-all"
               >
                 <Plus className="w-3.5 h-3.5" />
                 Add Item
-              </Button>
+              </button>
             </div>
 
             <div className="space-y-3">
@@ -338,14 +357,14 @@ export default function NewInternshipPage() {
                     value={req}
                     onChange={(e) => handleUpdateReq(idx, e.target.value)}
                     placeholder={`Requirement #${idx + 1}`}
-                    className="block w-full rounded-lg border border-slate-300 text-sm py-2 px-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="block w-full rounded-xl border border-white/[0.1] text-sm py-2.5 px-3.5 text-white bg-slate-900/80 focus:outline-none focus:border-blue-500"
                     required
                   />
                   {requirements.length > 1 && (
                     <button
                       type="button"
                       onClick={() => handleRemoveReq(idx)}
-                      className="p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors shrink-0"
+                      className="p-2 text-rose-400 hover:bg-rose-500/15 rounded-xl transition-colors shrink-0 cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -356,8 +375,16 @@ export default function NewInternshipPage() {
           </div>
 
           {/* Skills */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4">
-            <div className="flex items-center gap-2 text-base font-semibold text-slate-900 border-b border-slate-100 pb-3">
+          <div
+            className="rounded-3xl p-6 sm:p-8 space-y-4"
+            style={{
+              background: "rgba(15,23,42,0.85)",
+              backdropFilter: "blur(24px)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              boxShadow: "0 4px 24px -4px rgba(0,0,0,0.4)",
+            }}
+          >
+            <div className="flex items-center gap-2 text-base font-bold text-white border-b border-white/[0.08] pb-3">
               <span>Required Tech Skills</span>
             </div>
 
@@ -368,31 +395,29 @@ export default function NewInternshipPage() {
                 onChange={(e) => setSkillsInput(e.target.value)}
                 onKeyDown={handleAddSkill}
                 placeholder="e.g. Next.js, Docker, Python (Press Enter)"
-                className="block w-full rounded-lg border border-slate-300 text-sm py-2 px-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="block w-full rounded-xl border border-white/[0.1] text-sm py-2.5 px-3.5 text-white bg-slate-900/80 focus:outline-none focus:border-blue-500"
               />
-              <Button
+              <button
                 type="button"
-                variant="outline"
-                size="sm"
                 onClick={handleAddSkill}
-                className="shrink-0"
+                className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 transition-all flex items-center gap-1 shrink-0 cursor-pointer"
               >
-                <Plus className="w-4 h-4 mr-1" />
+                <Plus className="w-4 h-4" />
                 Add Skill
-              </Button>
+              </button>
             </div>
 
             <div className="flex flex-wrap gap-2 pt-1">
               {skills.map((skill) => (
                 <span
                   key={skill}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-800"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold bg-slate-800/90 text-blue-300 border border-white/[0.08]"
                 >
                   {skill}
                   <button
                     type="button"
                     onClick={() => setSkills(skills.filter((s) => s !== skill))}
-                    className="text-slate-500 hover:text-slate-900"
+                    className="text-slate-400 hover:text-rose-400 ml-1 cursor-pointer"
                   >
                     ×
                   </button>
@@ -403,13 +428,20 @@ export default function NewInternshipPage() {
 
           <div className="flex items-center justify-end gap-4 pt-4">
             <Link href="/recruiter/internships">
-              <Button variant="outline" size="md" type="button">
+              <button
+                type="button"
+                className="px-6 py-3 rounded-xl text-xs font-semibold text-slate-400 hover:text-white border border-white/[0.1] hover:bg-white/[0.06] transition-all cursor-pointer"
+              >
                 Cancel
-              </Button>
+              </button>
             </Link>
-            <Button type="submit" size="md" isLoading={loading} className="shadow-sm">
-              Publish Internship
-            </Button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-7 py-3 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.01] active:scale-[0.98] transition-all cursor-pointer"
+            >
+              {loading ? "Publishing..." : "Publish Internship"}
+            </button>
           </div>
         </form>
       </div>

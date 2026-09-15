@@ -23,19 +23,19 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      "inline-flex items-center justify-center font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.98] transition-transform duration-100";
+      "inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.98]";
 
     const variants = {
       primary:
-        "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 shadow-sm",
+        "bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/35 hover:scale-[1.01]",
       secondary:
-        "bg-slate-100 text-slate-900 hover:bg-slate-200 focus:ring-slate-400 border border-slate-200/80",
+        "bg-slate-800/80 text-slate-100 border border-white/10 hover:bg-slate-700/80 hover:border-white/20 shadow-sm",
       outline:
-        "border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 focus:ring-blue-500 shadow-sm",
+        "border border-white/10 bg-transparent text-slate-200 hover:bg-white/5 hover:border-blue-500/40 shadow-sm",
       ghost:
-        "text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus:ring-slate-400",
+        "text-slate-300 hover:bg-white/5 hover:text-white",
       danger:
-        "bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500 shadow-sm",
+        "bg-rose-500/15 text-rose-200 border border-rose-500/25 hover:bg-rose-500/20 hover:text-white shadow-sm",
     };
 
     const sizes = {

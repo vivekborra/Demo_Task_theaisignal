@@ -5,17 +5,42 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat("en-US", {
+export function formatCurrency(amount: number, locationOrCurrency?: string): string {
+  if (!amount || amount <= 0) return "Unpaid / Competitive";
+
+  const loc = (locationOrCurrency || "").toLowerCase();
+
+  // Explicitly check for US / Dollar only
+  const isUSD =
+    loc.includes("usd") ||
+    loc.includes("san francisco") ||
+    loc.includes("new york") ||
+    loc.includes("boston") ||
+    loc.includes("seattle") ||
+    loc.includes("austin") ||
+    loc.includes("chicago") ||
+    loc.includes("united states") ||
+    loc.includes("usa");
+
+  if (isUSD) {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
+    }).format(amount);
+  }
+
+  // All other cases (INR, Indian cities, Remote, or standard amounts) format with Rupee symbol ₹
+  return new Intl.NumberFormat("en-IN", {
     style: "currency",
-    currency: "USD",
+    currency: "INR",
     maximumFractionDigits: 0,
   }).format(amount);
 }
 
 export function formatDate(date: Date | string): string {
   const d = new Date(date);
-  return d.toLocaleDateString("en-US", {
+  return d.toLocaleDateString("en-IN", {
     month: "short",
     day: "numeric",
     year: "numeric",

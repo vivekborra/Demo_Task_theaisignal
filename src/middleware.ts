@@ -31,15 +31,6 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Auth pages redirect if already logged in
-  if (pathname === "/login" || pathname === "/register") {
-    if (session) {
-      const target = session.role === "RECRUITER" ? "/recruiter" : "/student/applications";
-      return NextResponse.redirect(new URL(target, request.url));
-    }
-    return NextResponse.next();
-  }
-
   // Student routes protection
   if (pathname.startsWith("/student")) {
     if (!session) {
@@ -70,5 +61,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/login", "/register", "/student/:path*", "/recruiter/:path*"],
+  matcher: ["/student/:path*", "/recruiter/:path*"],
 };
